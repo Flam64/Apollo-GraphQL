@@ -3,8 +3,9 @@
 /** Import des librairies */
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
+import { getOneCartoonById, getCartoons } from "./resolvers/cartoon.resolvers";
 
-const cartoons = [
+/* const cartoons = [
 	{
 		id: 1,
 		name: "Les Mystérieuses Cités d'Or",
@@ -23,7 +24,7 @@ const cartoons = [
 		description:
 			"Son Goku, un jeune garçon doté d'une force incroyable, part à la recherche des Dragon Balls, des boules de cristal magiques.",
 	},
-];
+]; */
 
 const typeDefs = `#graphql
   # This "Cartoon" type defines the queryable fields for every cartoon in our data source.
@@ -36,13 +37,15 @@ const typeDefs = `#graphql
   # The "Query" type is special: it lists all of the available queries
   type Query {
     getCartoons: [Cartoon]
+		getOneCartoonById(id:ID): Cartoon,
   }
 `;
 
 // This resolver retrieves books from the "books" array above.
 const resolvers = {
 	Query: {
-		getCartoons: () => cartoons,
+		getCartoons,
+		getOneCartoonById,
 	},
 };
 

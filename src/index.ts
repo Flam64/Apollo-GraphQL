@@ -7,10 +7,22 @@ import { getOneCartoonById, getCartoons } from "./resolvers/cartoon.resolvers";
 
 const typeDefs = `#graphql
   # This "Cartoon" type defines the queryable fields for every cartoon in our data source.
+	type Personnage {
+	id: ID
+	name: String
+	role: String
+	}
+
   type Cartoon {
     id: ID
     name: String
     description: String
+		nb_of_episodes: Int
+		nb_of_seasons: Int
+		genres: [String]
+		realisator: String
+		author: String
+		personnages: [Personnage]
   }
 
   # The "Query" type is special: it lists all of the available queries

@@ -19,3 +19,23 @@ export const getOneCartoonsById = (
 export const getCartoons = () => {
 	return cartoons;
 };
+
+export const createCartoon = (
+	_: unknown,
+	args: { cartoon: Cartoon },
+): number => {
+	const { personnages, ...rest } = args.cartoon;
+
+	const newPersonnages = personnages.map((pers) => ({
+		...pers,
+		id: Date.now(),
+	}));
+
+	const id = cartoons[cartoons.length - 1].id + 1;
+
+	const newCartoon: Cartoon = { ...rest, personnages: newPersonnages, id };
+
+	cartoons.push(newCartoon);
+
+	return id;
+};

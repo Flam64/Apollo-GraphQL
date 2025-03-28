@@ -20,5 +20,6 @@ export const CartoonInput = `{
   realisator: String
   author: String
   ft_diffusion: String
-  personnages: [Personnage]
+  personnages: [PersonnageInput]
+  
 }`;

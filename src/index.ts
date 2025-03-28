@@ -7,6 +7,7 @@ import {
 	getOneCartoonById,
 	getCartoons,
 	createCartoon,
+	deleteCartoon,
 } from "./resolvers/cartoon.resolvers";
 import { Personnage, PersonnageInput } from "./schemas/personnage.schema";
 import { Cartoon, CartoonInput } from "./schemas/cartoon.schema";
@@ -27,6 +28,7 @@ const typeDefs = `#graphql
 
 	type Mutation {
 	createCartoon(cartoon: CartoonInput): ID
+	deleteCartoon(id: ID): ID
 
 	}
 `;
@@ -39,6 +41,7 @@ const resolvers = {
 	},
 	Mutation: {
 		createCartoon,
+		deleteCartoon,
 	},
 };
 

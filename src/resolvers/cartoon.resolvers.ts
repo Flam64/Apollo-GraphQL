@@ -1,5 +1,6 @@
 import { default as cartoons } from "../../dataset.json";
 import type { Cartoon } from "../types/cartoon.type";
+let myCartoons = cartoons;
 
 type GetOneCartoonByIdArgs = {
 	id: string;
@@ -17,7 +18,7 @@ export const getOneCartoonsById = (
 };
 
 export const getCartoons = () => {
-	return cartoons;
+	return myCartoons;
 };
 
 export const createCartoon = (
@@ -38,4 +39,9 @@ export const createCartoon = (
 	cartoons.push(newCartoon);
 
 	return id;
+};
+
+export const deleteCartoon = (_: unknown, args: { id: string }) => {
+	myCartoons = myCartoons.filter((cart) => cart.id !== +args.id);
+	return args.id;
 };

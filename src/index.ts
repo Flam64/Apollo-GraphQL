@@ -1,6 +1,7 @@
 // A schema is a collection of type definitions (hence "typeDefs")
 
 /** Import des librairies */
+import "reflect-metadata";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import {
@@ -11,6 +12,7 @@ import {
 } from "./resolvers/cartoon.resolvers";
 import { Personnage, PersonnageInput } from "./schemas/personnage.schema";
 import { Cartoon, CartoonInput } from "./schemas/cartoon.schema";
+import { datasource } from "./DB/client";
 
 const typeDefs = `#graphql
   # This "Cartoon" type defines the queryable fields for every cartoon in our data source.
@@ -54,6 +56,7 @@ const server = new ApolloServer({
 
 /** Fonction auto appellée (évite la mise en constante) permettant de lancer le serveur */
 (async () => {
+	await datasource.initialize();
 	const { url } = await startStandaloneServer(server, {
 		listen: { port: 4000 },
 	});

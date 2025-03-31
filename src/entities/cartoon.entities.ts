@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Genre } from "../entities/genre.entities";
+import { Personnage } from "../entities/personnage.entities";
 
 @Entity()
 export class Cartoon {
@@ -25,34 +27,16 @@ export class Cartoon {
 
 	@Column()
 	ft_diffusion: string;
-}
 
-@Entity()
-export class Genre {
-	@PrimaryGeneratedColumn()
-	id: number;
+	@OneToMany(
+		() => Genre,
+		(genre) => genre.cartoon,
+	)
+	genres?: Genre[];
 
-	@Column()
-	name: string;
-
-	@Column()
-	cartoon_id: number;
-}
-
-@Entity()
-export class Personnage {
-	@PrimaryGeneratedColumn()
-	id: number;
-
-	@Column()
-	name: string;
-
-	@Column()
-	role: string;
-
-	@Column()
-	short_description: string;
-
-	@Column()
-	cartoon_id: number;
+	@OneToMany(
+		() => Personnage,
+		(personnage) => personnage.cartoon,
+	)
+	personnages?: Personnage[];
 }

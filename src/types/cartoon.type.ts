@@ -1,6 +1,5 @@
 //src/types/cartoon.type.ts
 import type { Personnage } from "./personnage.type";
-//import type { Genre } from "./genre.type";
 
 export type Cartoon = {
 	id: number;

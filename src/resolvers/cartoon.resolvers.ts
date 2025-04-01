@@ -1,47 +1,65 @@
-import { default as cartoons } from "../../dataset.json";
-import type { Cartoon } from "../types/cartoon.type";
-let myCartoons = cartoons;
+import { Cartoon } from "../entities/cartoon.entities";
+import { Personnage } from "../entities/personnage.entities";
+import { Genre } from "../entities/genre.entities";
+import type { DeleteResult } from "typeorm";
 
-type GetOneCartoonByIdArgs = {
-	id: string;
-};
-
-export const getOneCartoonById = (): Cartoon => {
-	return cartoons[0];
-};
-
-export const getOneCartoonsById = (
+export const getOneCartoonById = async (
 	_: unknown,
-	args: GetOneCartoonByIdArgs,
-): Cartoon => {
-	return cartoons.find((cartoon) => cartoon.id === +args.id) as Cartoon;
+	args: { id: string },
+): Promise<Cartoon> => {
+	const oneCartoon = await Cartoon.findOneBy({ id: +args.id });
+
+	return oneCartoon as Cartoon;
 };
 
-export const getCartoons = () => {
-	return myCartoons;
+export const getCartoons = async (): Promise<Cartoon[]> => {
+	return Cartoon.find();
 };
 
-export const createCartoon = (
+export const createCartoon = async (
 	_: unknown,
 	args: { cartoon: Cartoon },
-): number => {
-	const { personnages, ...rest } = args.cartoon;
+): Promise<number> => {
+	const { personnages, genres, ...rest } = args.cartoon;
 
-	const newPersonnages = personnages.map((pers) => ({
-		...pers,
-		id: Date.now(),
-	}));
+	/** Création du tableau d'instance de personnage */
+	const newPersonnages = personnages?.map((pers) => {
+		const myPers = new Personnage();
+		myPers.name = pers.name;
+		myPers.short_description = pers.short_description;
+		myPers.role = pers.role;
+		return myPers;
+	}) as Personnage[];
 
-	const id = cartoons[cartoons.length - 1].id + 1;
+	/** Création du tableau d'instance de genre */
+	const newGenre = genres?.map((genre) => {
+		const myGenre = new Genre();
+		myGenre.name = genre.name;
 
-	const newCartoon: Cartoon = { ...rest, personnages: newPersonnages, id };
+		return myGenre;
+	}) as Genre[];
 
-	cartoons.push(newCartoon);
+	/** Association des données et instances à */
+	const newCartoon: Cartoon = new Cartoon();
+	Object.assign(newCartoon, rest);
+	newCartoon.personnages = newPersonnages;
+	newCartoon.genres = newGenre;
 
-	return id;
+	const result = await newCartoon.save();
+	return result.id;
 };
 
-export const deleteCartoon = (_: unknown, args: { id: string }) => {
-	myCartoons = myCartoons.filter((cart) => cart.id !== +args.id);
-	return args.id;
+export const deleteCartoon = async (
+	_: unknown,
+	args: { id: string },
+): Promise<boolean> => {
+	const cartoonDelete: DeleteResult = await Cartoon.delete({
+		id: +args.id,
+	});
+
+	// Si la suppression s'est bien déroulée (enregistrement existant)
+	if (cartoonDelete.affected !== null || cartoonDelete.affected !== undefined) {
+		return true;
+	}
+	return false;
 };

@@ -5,8 +5,8 @@ import "reflect-metadata";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import {
-	getOneCartoonById,
 	getCartoons,
+	getOneCartoonById,
 	createCartoon,
 	deleteCartoon,
 } from "./resolvers/cartoon.resolvers";
@@ -30,7 +30,7 @@ const typeDefs = `#graphql
 
 	type Mutation {
 	createCartoon(cartoon: CartoonInput): ID
-	deleteCartoon(id: ID): ID
+	deleteCartoon(id: ID): Boolean
 
 	}
 `;
